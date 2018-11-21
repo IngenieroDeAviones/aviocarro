@@ -1,23 +1,25 @@
-function  chord = getChord(x, b, L, rootChord, Ct)
+function [theta, theta_chord] = getChord(b, L, rootChord, Ct)
 
-    for i = 1:length(x)
+    N = 101; %Number of positions to compute the chord
+    y = linspace((-b/2), (b/2), N); %Each position to compute the chord
 
-        if x(i) == -b/2;
-            chord = 0;
+    for i = 1:length(y)-1
 
-        elseif x(i) < -L/2 && x(i) ~= -b/2;
-            chord(i) = Ct + (-b/2 - x(i))*((rootChord - Ct)/(L/2 - b/2));
+        y_pos(i) = (y(i) + y(i+1))/2;
 
-        elseif x(i) >= -L/2 && x(i) <= L/2;
-            chord(i) = rootChord;
+        if y_pos(i) < -L/2;
+            theta_chord(i) = Ct + (-b/2 - y_pos(i))*((rootChord - Ct)/(L/2 - b/2));
+
+        elseif y_pos(i) >= -L/2 && y_pos(i) <= L/2;
+            theta_chord(i) = rootChord;
         
-        elseif x(i) > L/2 && x(i) ~= b/2;
-            chord(i) = + rootChord - ((rootChord - Ct)./(b./2 - L./2)).*(x(i) - L./2); %Lineal function
-        
-        else
-            chord(i) = 0;
+        else y_pos(i) > L/2;
+            theta_chord(i) = + rootChord - ((rootChord - Ct)./(b./2 - L./2)).*(y_pos(i) - L./2); %Lineal function
+
         end
 
     end
      
+    theta = linspace(0, pi, length(y_pos)); %Convert y to theta
+
 end
