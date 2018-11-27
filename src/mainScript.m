@@ -28,7 +28,7 @@ for i = 1:length(Length)
     
     possible_ct = getCt(wing.surface, wing.span, wing.rootChord, Length(i)); %We compute the Ct associated with L(i)
 
-    if  possible_ct >= 0 && Length(i) <= wing.span %They fullfill geometrical properties
+    if  possible_ct >= 0 && Length(i) <= wing.span %If they fullfill geometrical properties
 
         L(i) = Length(i); %We add this new value
         ct(length(L)) = possible_ct; %We add this new value
@@ -36,6 +36,7 @@ for i = 1:length(Length)
         [theta, theta_chord] = getChord(wing.span, L(i), wing.rootChord, ct(i)); %We compute the chord distribution along theta [0, PI]        
         A1 = getA1(aircraft.weight, ambient.density, aircraft.cruiseSpeed, wing.surface, wing.aspectRatio); %We compute the A1 coefficient
         
+        [mat_b, mat_A] = solveSystem(wing.span, theta, theta_chord, A1);
 
     end
 
@@ -43,11 +44,9 @@ end
 
 
 
-
-
-
 %% ALL PLOTS BELOW THIS LINE
 
+%{
 figure() %Plotting the airfoil
 fill(x_naca, y_naca, 'b')
 title('NACA 65-218')
@@ -79,5 +78,6 @@ ylabel('X-AXIS')
 prompt = 'PRESS ENTER TO CLOSE ALL GRAPHS...';
 command = input(prompt);
 close all; clc;
+%}
 
 

@@ -6,11 +6,12 @@ function [theta, theta_chord] = getChord(b, L, rootChord, Ct)
     for i = 1:length(y)-1
 
         y_pos(i) = (y(i) + y(i+1))/2;
+        theta(i) = acos(-(2/b)*y_pos(i));
 
-        if y_pos(i) < -L/2;
+        if y_pos(i) < -L/2
             theta_chord(i) = Ct + (-b/2 - y_pos(i))*((rootChord - Ct)/(L/2 - b/2));
 
-        elseif y_pos(i) >= -L/2 && y_pos(i) <= L/2;
+        elseif y_pos(i) >= -L/2 && y_pos(i) <= L/2
             theta_chord(i) = rootChord;
         
         else y_pos(i) > L/2;
@@ -20,6 +21,8 @@ function [theta, theta_chord] = getChord(b, L, rootChord, Ct)
 
     end
      
-    theta = linspace(0, pi, length(y_pos)); %Convert y to theta
+    %theta = linspace(0, pi, length(y_pos)); %Convert y to theta
+    %plot(theta, theta_chord);
+    %hold on
 
 end
