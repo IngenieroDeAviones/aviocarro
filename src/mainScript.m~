@@ -42,10 +42,10 @@ for i = 1:length(Length)
         
         [A, b, sol] = solveSystem(wing.span, theta, theta_chord, A1); %We solve the system
         
-        An = sol([1:length(sol)-1])';
-        alfa_pi_2 = sol(length(sol))';
+        An = sol([1:99])';
+        alfa_pi_2 = sol(length())
         
-        delta(counter) = getDelta(A1, An); %Computing delta
+        %delta(counter) = getDelta(A1, sol); %Computing delta
         
         counter = counter + 1; %Increase counter
     end
