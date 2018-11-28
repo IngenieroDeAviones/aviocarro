@@ -1,28 +1,22 @@
-function [theta, theta_chord] = getChord(b, L, rootChord, Ct)
+function chord = getChord(b, L_span, theta_span, Ct, Cr)
 
-    N = 101; %Number of positions to compute the chord
-    y = linspace((-b/2), (b/2), N); %Each position to compute the chord
+for n_L = 1:length(L_span) %For each geometry
+  for n_theta = 1:length(theta_span) %For each theta position
 
-    for i = 1:length(y)-1
+    lim1 = acos(L_span(n_L)/b); %This is first point at which wing deflects
+    lim2 = acos(-L_span(n_L)/b); %This second point at which wing deflects
 
-        y_pos(i) = (y(i) + y(i+1))/2;
-        theta(i) = acos(-(2/b)*y_pos(i));
+    if theta_span(n_theta) >= 0 && theta_span(n_theta) <= lim1; %Chord grows linearly
+      chord(n_theta, n_L) = Ct(n_L)+((Cr-Ct(n_L))./(b./2-L_span(n_L)./2)).*((-b./2.*cos(theta_span(n_theta)))+b./2);
 
-        if y_pos(i) < -L/2
-            theta_chord(i) = Ct + (-b/2 - y_pos(i))*((rootChord - Ct)/(L/2 - b/2));
+    elseif theta_span(n_theta) > lim1 && theta_span(n_theta) <= lim2; %Chord remains constant
+      chord(n_theta, n_L) = Cr;
 
-        elseif y_pos(i) >= -L/2 && y_pos(i) <= L/2
-            theta_chord(i) = rootChord;
-        
-        else y_pos(i) > L/2;
-            theta_chord(i) = + rootChord - ((rootChord - Ct)./(b./2 - L./2)).*(y_pos(i) - L./2); %Lineal function
-
-        end
-
+    elseif n_theta <= length(theta_span) && theta_span(n_theta) > lim2; %Chord decreases linearly
+      chord(n_theta, n_L)=Cr-((Cr-Ct(n_L))./(b./2-L_span(n_L)./2)).*((-b./2.*cos(theta_span(n_theta)))-L_span(n_L)./2);
+    
     end
-     
-    %theta = linspace(0, pi, length(y_pos)); %Convert y to theta
-    %plot(theta, theta_chord);
-    %hold on
+  
+  end
 
 end

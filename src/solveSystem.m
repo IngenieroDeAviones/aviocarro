@@ -1,26 +1,34 @@
-function [A, b, sol] = solveSystem(span, theta, theta_chord, A1)
+function [delta, Cd] = solveSystem(L_span, theta_span, chord_span, a, A1, alfa_0, Cl, AR, N)
 
-    alfa_0 = -0.2; %This is a fixed value obtained from XFLR5
-    N = length(theta); %Total number of points  
 
-    for i = 1:N %Row, number of equations
+    A = zeros(length(theta_span), N); %Prellocating on memory A matrix
+    B = zeros(N, 1); %Prellocating on memory B matrix
+    delta = zeros(length(L_span));
+    
+    for n_L = 1:length(L_span)
+        A(:,1)=1;
+       
+    for n_theta=2:length(theta_span)
+        for n = 2:N
         
-        %j = 3; %Computing for odd coefficients
-        
-        for j = 2:N %Colum Element
-            
-            A(i, j-1) = (2*span/(pi*theta_chord(i)))*sin(j*theta(i)) + j*(sin(j*theta(i))/sin(theta(i)));
-            %j = j + 2; %Compute for next odd coefficient
+        A(n_theta,n)=-((a./chord_span(n_theta,n_L)).*sin(n.*theta_span(n_theta))+n.*(sin(n.*theta_span(n_theta))./sin(theta_span(n_theta))));
+        A(1,n)=-n.^2;  
+        B(1)=alfa_0+A1;
+        B(n_theta)=alfa_0+A1.*(a./chord_span(n_theta,n_L)).*sin(theta_span(n_theta))+A1;
         
         end
-        
-        A(i,N) = -1; %Last colum of A is always -alfa(pi/2)
-        b(i, 1) = -alfa_0 - A1*((2*span/(pi*theta_chord(i)))*sin(1*theta(i)) + 1*(sin(1*theta(i))/sin(theta(i))));
-        %b(i, 1) = -alfa_0 - A1*(2*span/(pi*theta_chord(i)))*sin(1*theta(i));
+    end
+    
+    x = linsolve(A,B);
+    
+    for n = 2:N
+        delta(n_L)=delta(n_L)+n*((x(n))/A1)^2;
+    end
+    
+    Cd(n_L)=Cl^2/(pi*AR)*(1+delta(n_L));
     
     end
     
-    sol = A\b; %Solution to the system
-          
-   
 end
+
+    

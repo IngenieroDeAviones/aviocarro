@@ -1,4 +1,4 @@
-function ro = getRoISA(z)
+function ro = getRhoISA(z)
     
     R = 287;
     T = getTemperatureISA(z);
