@@ -26,6 +26,7 @@ aircraft.Re = (ambient.rho/ambient.mu)*aircraft.cruiseSpeed*aircraft.b;
 
 %% SOLVING  Ct 
 L_span = 0:0.01:11.26; %Span of L
+%L_span = 0:0.01:aircraft.b/2;
 Ct_span = getCt(aircraft.S, aircraft.b, aircraft.Cr, L_span); %Get the chord for that point
 theta_span = 0:0.01:pi; %Span of theta
 
@@ -73,11 +74,21 @@ for n_Cd = 1:length(Cd)
     Cl(n_Cd)=sqrt(Cd(n_Cd)*aircraft.AR*pi/(1+delta));
 end
 
+
+data_1 = load('ClCdXflr5.txt');
+
+Cd_XFRL5 = data_1(:,1);
+Cl_XFLR5 = data_1(:,2);
+
+
 figure()
-plot(Cd, Cl, 'Linewidth', 2);
+plot(Cd, Cl, 'b', 'Linewidth', 2);
 title('POLAR PLOT: C_{l} vs C_{d}')
 xlabel('C_{d}')
 ylabel('C_{l}')
+hold on
+plot(Cd_XFRL5, Cl_XFLR5, 'r', 'Linewidth', 2);
+legend('Matlab', 'XFLR5');
 
 %% AoA AS FUNCTION OF Uinf
 
@@ -86,11 +97,20 @@ N = 50;
 
 AoA = solveAoA(aircraft.b, L, theta_span, Ct, aircraft.Cr, Uinf, alfa_0, a, aircraft, ambient, N);
 
+data_2 = load('U_inf_AoA.txt');
+
+AoA_XFRL5 = data_2(:,1);
+U_XFLR5 = data_2(:,2);
+
+
 figure()
-plot(Uinf, rad2deg(AoA), 'Linewidth', 2);
-title('AoA as function of U_{\inf}')
-xlabel('U_{\inf} [m/s]')
+plot(Uinf, rad2deg(AoA), 'b', 'Linewidth', 2);
+title('AoA as function of U_{inf}')
+xlabel('U_{inf} [m/s]')
 ylabel('AoA [rad]')
+hold on
+plot(U_XFLR5, AoA_XFRL5, 'r', 'Linewidth', 2);
+legend('Matlab', 'XFLR5');
 
 
 
