@@ -8,6 +8,8 @@ clear; clc;
 %% LOADING AMBIENT VARIABLES
 altitude = 3050; %[m]
 ambient.rho = getRhoISA(altitude);
+ambient.mu = 1.519e-3; 
+ambient.T = getTemperatureISA(altitude);
 
 %% LOADING AIRCRAFT VARIABLES
 aircraft.S= 41; %[m^2]
@@ -19,6 +21,8 @@ aircraft.cruiseSpeed = 300*1000/3600; %[m/s]
 aircraft.AR = 10; %Aspec Ratio
 aircraft.altitude = altitude; %[m]
 aircraft.Cl = (2*aircraft.W)/(ambient.rho*aircraft.cruiseSpeed^2*aircraft.S);
+
+aircraft.Re = (ambient.rho/ambient.mu)*aircraft.cruiseSpeed*aircraft.b;
 
 %% SOLVING  Ct 
 L_span = 0:0.01:11.26; %Span of L
