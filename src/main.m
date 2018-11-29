@@ -44,12 +44,13 @@ N = 100; %Resolution of the allocation method
 [delta_plot, aircraft.Cd_plot, x] = solveSystemDelta(L_span, theta_span, chord_span, a, A1, alfa_0, aircraft.Cl, aircraft.AR, N);
 
 figure() %Plotting the results
-plot(Ct_span, delta_plot, 'Linewidth', 2);
+plot(Ct_span, delta_plot(:,1), 'b', 'Linewidth', 2);
 title('\delta vs C_{t}');
-xlabel('C_{t}')
+xlabel('C_{t} [m]')
 ylabel('\delta')
 hold on
 plot(0.7658, 0.0080, 'ro');
+legend('Possible Configuration', 'Optimal Geometry');
 
 pos = 752; %This is the position of the minimum length in the Ct_span vector
 
@@ -107,7 +108,7 @@ figure()
 plot(Uinf, rad2deg(AoA), 'b', 'Linewidth', 2);
 title('AoA as function of U_{inf}')
 xlabel('U_{inf} [m/s]')
-ylabel('AoA [rad]')
+ylabel('AoA [deg]')
 hold on
 plot(U_XFLR5, AoA_XFRL5, 'r', 'Linewidth', 2);
 legend('Matlab', 'XFLR5');
