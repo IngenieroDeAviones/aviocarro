@@ -1,4 +1,4 @@
-function [delta, Cd] = solveSystem(L_span, theta_span, chord_span, a, A1, alfa_0, Cl, AR, N)
+function [delta, Cd, x] = solveSystem(L_span, theta_span, chord_span, a, A1, alfa_0, Cl, AR, N)
 
 
     A = zeros(length(theta_span), N); %Prellocating on memory A matrix

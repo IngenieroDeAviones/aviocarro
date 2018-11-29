@@ -44,15 +44,14 @@ title('\delta vs C_{t}');
 xlabel('C_{t}')
 ylabel('\delta')
 hold on
-plot(0.7658, 0.0080, 'ro');
+plot(0.7658, 0.0079, 'ro');
 
-pos = 752; %This is the position of the minimum length in the Ct_span vector
+pos = find()
 
 %% POLAR PLOTS BETWEEN MATLAB AND XFLR5
 
 %Fixed values
-%L = 7.46;
-L = L_span(pos);
+L = 7.46;
 Ct = 0.7658;
 
 N = 101;
@@ -83,10 +82,7 @@ N = 50;
 AoA = solveAoA(aircraft.b, L, theta_span, Ct, aircraft.Cr, Uinf, alfa_0, a, aircraft, ambient, N);
 
 figure()
-plot(Uinf, rad2deg(AoA), 'Linewidth', 2);
-title('AoA as function of U_{\inf}')
-xlabel('U_{\inf} [m/s]')
-ylabel('AoA [rad]')
+plot(Uinf, AoA)
 
 
 
